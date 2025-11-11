@@ -1,16 +1,19 @@
 #!/bin/bash
 
-# Define the file or directory path
+# Define the file or directory path we want to check
 path="/tmp/testfile"
 
-# Check if file exists
+# Check if the given path is a FILE
 if [ -f "$path" ]; then
     echo "✅ File exists: $path"
-# Check if directory exists
+
+# Check if the given path is a DIRECTORY
 elif [ -d "$path" ]; then
     echo "📁 Directory exists: $path"
+
+# If neither file nor directory exists — create file
 else
-    echo "❌ Not found — creating it..."
-    touch "$path"   # Creates a file
+    echo "❌ Not found — creating file..."
+    touch "$path"     # Creates an empty file
     echo "✅ File created: $path"
 fi
