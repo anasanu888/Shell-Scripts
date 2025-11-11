@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#Install Packages From Script Array (No user input)
+# Predefined list of packages to install
+packages=("git" "tree" "docker")
+
+# Loop through package array
+for pkg in "${packages[@]}"
+do
+    if rpm -q "$pkg" &> /dev/null; then
+        echo "✅ $pkg already installed"
+    else
+        echo "❌ $pkg missing — installing..."
+        sudo yum install -y "$pkg"
+        echo "✅ Installed: $pkg"
+    fi
+done
