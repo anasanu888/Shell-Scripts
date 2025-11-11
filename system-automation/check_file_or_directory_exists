@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Define the file or directory path
+path="/tmp/testfile"
+
+# Check if file exists
+if [ -f "$path" ]; then
+    echo "✅ File exists: $path"
+# Check if directory exists
+elif [ -d "$path" ]; then
+    echo "📁 Directory exists: $path"
+else
+    echo "❌ Not found — creating it..."
+    touch "$path"   # Creates a file
+    echo "✅ File created: $path"
+fi
