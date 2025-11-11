@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# List of services to monitor
+services=("sshd" "docker" "crond")
+
+for svc in "${services[@]}"
+do
+    # Check service status quietly — no output
+    if systemctl is-active --quiet "$svc"; then
+        echo "✅ $svc is running"
+    else
+        echo "❌ $svc is NOT running — starting..."
+        sudo systemctl start "$svc"
+
+        # Double-check to ensure service started properly
+        if systemctl is-active --quiet "$svc"; then
+            echo "✅ $svc started successfully"
+        else
+            echo "⛔ Failed to start $svc — check logs"
+        fi
+    fi
+done
