@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# 🔹 Log file to monitor
+LOG_FILE="/var/log/messages"
+
+# 🔹 Keyword to search
+KEYWORD="ERROR"
+
+# 🔹 Email details (change as needed)
+TO="admin@example.com"
+SUBJECT="⚠️ Log Alert: Error detected on $(hostname)"
+TMP_FILE="/tmp/error_alert.txt"
+
+# 🔹 Check if log file exists
+if [ ! -f "$LOG_FILE" ]; then
+    echo "❌ Log file not found: $LOG_FILE"
+    exit 1
+fi
+
+# 🔹 Search for keyword (case-insensitive & quiet)
+if grep -iq "$KEYWORD" "$LOG_FILE"; then
+    echo "⚠️ Error detected in $LOG_FILE"
+
+    # Save last 10 error lines to temporary file
+    {
+        echo "Server: $(hostname)"
+        echo "Date: $(date)"
+        echo "Log file: $LOG_FILE"
+        echo ""
+        echo "Last 10 error lines:"
+        grep -i "$KEYWORD" "$LOG_FILE" | tail -10
+    } > "$TMP_FILE"
+
+    # Send email alert (requires 'mail' or 'mailx' package)
+    mail -s "$SUBJECT" "$TO" < "$TMP_FILE"
+
+    echo "📧 Email alert sent to $TO"
+else
+    echo "✅ No errors found in logs"
+fi
